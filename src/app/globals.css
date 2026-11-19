@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+@theme {
+  --color-ink-950: #0d0c0b;
+  --color-ink-900: #141210;
+  --color-ink-850: #1a1714;
+  --color-ink-800: #211e1a;
+  --color-ink-700: #2b2722;
+  --color-ink-600: #3a352e;
+  --color-ink-500: #5a5349;
+  --color-ink-400: #8a8174;
+  --color-ink-300: #b3a999;
+  --color-ink-200: #d6cdbd;
+  --color-ink-100: #ece6da;
+  --color-ember-400: #ff9560;
+  --color-ember-500: #ff7a3d;
+  --color-ember-600: #e85f22;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--color-ink-950);
+  color: var(--color-ink-100);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ember-400);
+  outline-offset: 2px;
+}
+
+/* Penyesuaian tema React Flow agar menyatu dengan palet FlowForge */
+.react-flow {
+  --xy-background-color: var(--color-ink-950);
+  --xy-edge-stroke: var(--color-ink-400);
+  --xy-edge-stroke-selected: var(--color-ember-400);
+  --xy-connectionline-stroke: var(--color-ember-400);
+  --xy-minimap-background-color: var(--color-ink-900);
+  --xy-controls-button-background-color: var(--color-ink-850);
+  --xy-controls-button-background-color-hover: var(--color-ink-700);
+  --xy-controls-button-color: var(--color-ink-200);
+  --xy-controls-button-border-color: var(--color-ink-600);
+}
+.react-flow__controls {
+  border: 1px solid var(--color-ink-600);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+}
+.react-flow__minimap {
+  border: 1px solid var(--color-ink-600);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.react-flow__attribution {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
