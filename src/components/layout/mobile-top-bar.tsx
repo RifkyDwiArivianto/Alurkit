@@ -6,7 +6,7 @@ import { MenuItem, MenuPopover, MenuSeparator } from "@/components/ui/menu-popov
 import { cn } from "@/lib/utils";
 import type { SaveStatus } from "@/stores/ui-store";
 import { ModeDropdown } from "./mode-dropdown";
-import { SAVE_DOT, saveLabel } from "./top-bar";
+import { Logo, SAVE_DOT, saveLabel } from "./top-bar";
 
 export type MobileMenuEntry =
   | { type: "item"; label: string; icon: ReactNode; onSelect: () => void; disabled?: boolean; title?: string }
@@ -19,8 +19,10 @@ interface MobileTopBarProps {
   titleLabel: string;
   saveStatus: SaveStatus;
   savedAt: number | null;
-  /** Satu aksi utama di kanan baris pertama. */
-  primary: ReactNode;
+  /** Aksi utama opsional di kanan baris pertama (Workflow: Run/Stop). Flowchart tidak punya; aksinya ada di menu ⋯. */
+  primary?: ReactNode;
+  /** Item menu ⋯ sebelum "Import JSON" (mis. Uji alur, Undo, Redo); diikuti pemisah. */
+  menuLead?: MobileMenuEntry[];
   /** Item menu ⋯ setelah "Import JSON". */
   menuItems: MobileMenuEntry[];
   importLabel: string;
@@ -41,6 +43,7 @@ export function MobileTopBar({
   saveStatus,
   savedAt,
   primary,
+  menuLead = [],
   menuItems,
   importLabel,
   importDisabled,
@@ -60,9 +63,10 @@ export function MobileTopBar({
   return (
     <header className="relative z-40 shrink-0 border-b border-ink-700 bg-ink-900">
       <div className="flex h-12 items-center gap-2 px-2">
-        <ModeDropdown />
+        <Logo alwaysWordmark={!primary} />
         <div className="min-w-0 flex-1" />
         {primary}
+        <ModeDropdown />
 
         <input
           ref={fileInput}
@@ -81,7 +85,7 @@ export function MobileTopBar({
           <button
             ref={menuTrigger}
             type="button"
-            aria-label="Menu file"
+            aria-label="Menu"
             aria-haspopup="menu"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
@@ -92,20 +96,20 @@ export function MobileTopBar({
           >
             <Ellipsis className="size-5" aria-hidden />
           </button>
-          <MenuPopover open={menuOpen} onClose={() => setMenuOpen(false)} triggerRef={menuTrigger} label="Menu file" align="right" dim>
+          <MenuPopover open={menuOpen} onClose={() => setMenuOpen(false)} triggerRef={menuTrigger} label="Menu" align="right" dim>
+            {menuLead.length > 0 && (
+              <>
+                {renderEntries(menuLead, select)}
+                <MenuSeparator />
+              </>
+            )}
             <MenuItem
               label={importLabel}
               icon={<Upload className="size-4" aria-hidden />}
               disabled={importDisabled}
               onSelect={select(() => fileInput.current?.click())}
             />
-            {menuItems.map((entry, i) =>
-              entry.type === "separator" ? (
-                <MenuSeparator key={`sep-${i}`} />
-              ) : (
-                <MenuItem key={entry.label} label={entry.label} icon={entry.icon} disabled={entry.disabled} title={entry.title} onSelect={select(entry.onSelect)} />
-              ),
-            )}
+            {renderEntries(menuItems, select)}
           </MenuPopover>
         </div>
       </div>
@@ -118,6 +122,16 @@ export function MobileTopBar({
         </span>
       </div>
     </header>
+  );
+}
+
+function renderEntries(entries: MobileMenuEntry[], select: (action: () => void) => () => void) {
+  return entries.map((entry, i) =>
+    entry.type === "separator" ? (
+      <MenuSeparator key={`sep-${i}`} />
+    ) : (
+      <MenuItem key={entry.label} label={entry.label} icon={entry.icon} disabled={entry.disabled} title={entry.title} onSelect={select(entry.onSelect)} />
+    ),
   );
 }
 

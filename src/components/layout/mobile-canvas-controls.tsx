@@ -1,7 +1,7 @@
 "use client";
 
 import { useReactFlow } from "@xyflow/react";
-import { Maximize, Minus, Plus, Redo2, Undo2 } from "lucide-react";
+import { Maximize, Minus, Plus } from "lucide-react";
 import { useUiStore } from "@/stores/ui-store";
 
 const BTN =
@@ -10,19 +10,15 @@ const GROUP = "flex overflow-hidden rounded-xl border border-ink-600 bg-ink-850/
 
 interface MobileCanvasControlsProps {
   addLabel: string;
-  undo: () => void;
-  redo: () => void;
-  canUndo: boolean;
-  canRedo: boolean;
   /** Panel bawah inline (Uji alur / log) yang sedang terbuka; kontrol disembunyikan seperti saat ada sheet. */
   panelOpen?: boolean;
 }
 
 /**
- * Kontrol mengambang canvas di HP. Kiri bawah: tumpukan zoom di atas pil undo/redo. Kanan bawah: FAB "+" yang
+ * Kontrol mengambang canvas di HP. Kiri bawah: tumpukan zoom (Undo/Redo ada di menu ⋯ top bar). Kanan bawah: FAB "+" yang
  * membuka palet. Semua disembunyikan selama ada sheet atau panel bawah terbuka.
  */
-export function MobileCanvasControls({ addLabel, undo, redo, canUndo, canRedo, panelOpen = false }: MobileCanvasControlsProps) {
+export function MobileCanvasControls({ addLabel, panelOpen = false }: MobileCanvasControlsProps) {
   const { zoomIn, zoomOut, fitView } = useReactFlow();
   const sheetOpen = useUiStore((s) => s.bottomInset > 0);
   const paletteOpen = useUiStore((s) => s.paletteOpen);
@@ -31,7 +27,7 @@ export function MobileCanvasControls({ addLabel, undo, redo, canUndo, canRedo, p
 
   return (
     <>
-      <div className="absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-3 z-10 flex flex-col items-start gap-2">
+      <div className="absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-3 z-10 flex flex-col items-start">
         <div role="group" aria-label="Zoom" className={`${GROUP} flex-col`}>
           <button type="button" className={BTN} onClick={() => void zoomIn({ duration: 150 })} aria-label="Perbesar">
             <Plus className="size-5" aria-hidden />
@@ -41,14 +37,6 @@ export function MobileCanvasControls({ addLabel, undo, redo, canUndo, canRedo, p
           </button>
           <button type="button" className={BTN} onClick={() => void fitView({ padding: 0.2, duration: 250, maxZoom: 1 })} aria-label="Sesuaikan tampilan">
             <Maximize className="size-4" aria-hidden />
-          </button>
-        </div>
-        <div role="group" aria-label="Riwayat" className={GROUP}>
-          <button type="button" className={BTN} onClick={undo} disabled={!canUndo} aria-label="Undo">
-            <Undo2 className="size-5" aria-hidden />
-          </button>
-          <button type="button" className={BTN} onClick={redo} disabled={!canRedo} aria-label="Redo">
-            <Redo2 className="size-5" aria-hidden />
           </button>
         </div>
       </div>

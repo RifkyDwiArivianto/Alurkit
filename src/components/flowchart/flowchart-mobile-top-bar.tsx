@@ -1,16 +1,14 @@
 "use client";
 
-import { FileJson, FilePlus, FlaskConical, Image as ImageIcon, Printer, Sparkles } from "lucide-react";
+import { FileJson, FilePlus, FlaskConical, Image as ImageIcon, Printer, Redo2, Sparkles, Undo2 } from "lucide-react";
 import { MobileTopBar } from "@/components/layout/mobile-top-bar";
-import { Button } from "@/components/ui/button";
 import { exportFlowchartJson, exportFlowchartPng, importFlowchartFile, printFlowchart } from "@/features/flowchart/file-io";
 import { loadSampleFlowchart, startNewFlowchart } from "@/features/flowchart/load-sample";
 import { useFlowchartStore } from "@/features/flowchart/store";
 import { useTestStore } from "@/features/flowchart/test-store";
-import { cn } from "@/lib/utils";
 import { useUiStore } from "@/stores/ui-store";
 
-/** Top bar HP mode Flowchart: "Uji alur" sebagai aksi utama; file dan contoh ada di menu ⋯. */
+/** Top bar HP mode Flowchart: Uji alur, Undo/Redo, file, dan contoh semuanya ada di menu ⋯. */
 export function FlowchartMobileTopBar() {
   const title = useFlowchartStore((s) => s.title);
   const setTitle = useFlowchartStore((s) => s.setTitle);
@@ -19,6 +17,10 @@ export function FlowchartMobileTopBar() {
   const savedAt = useUiStore((s) => s.chartSavedAt);
   const testOpen = useTestStore((s) => s.open);
   const toggleTest = useTestStore((s) => s.togglePanel);
+  const undo = useFlowchartStore((s) => s.undo);
+  const redo = useFlowchartStore((s) => s.redo);
+  const canUndo = useFlowchartStore((s) => s.past.length > 0);
+  const canRedo = useFlowchartStore((s) => s.future.length > 0);
 
   const toggleTestPanel = () => {
     // Panel samping menutupi canvas, jadi tutup dulu supaya sorotan alur terlihat.
@@ -37,17 +39,17 @@ export function FlowchartMobileTopBar() {
       importLabel="Import JSON"
       importInputLabel="Pilih file flowchart JSON"
       onImportFile={(file) => void importFlowchartFile(file)}
-      primary={
-        <Button
-          variant="primary"
-          className={cn("h-11 px-3.5", testOpen && "ring-2 ring-ember-400/60 ring-offset-2 ring-offset-ink-900")}
-          onClick={toggleTestPanel}
-          aria-pressed={testOpen}
-          title="Cek struktur dan telusuri alur langkah demi langkah"
-        >
-          <FlaskConical className="size-4" aria-hidden /> Uji alur
-        </Button>
-      }
+      menuLead={[
+        {
+          type: "item",
+          label: "Uji alur",
+          icon: <FlaskConical className="size-4" aria-hidden />,
+          onSelect: toggleTestPanel,
+          title: testOpen ? "Tutup panel Uji alur" : "Cek struktur dan telusuri alur langkah demi langkah",
+        },
+        { type: "item", label: "Undo", icon: <Undo2 className="size-4" aria-hidden />, onSelect: undo, disabled: !canUndo },
+        { type: "item", label: "Redo", icon: <Redo2 className="size-4" aria-hidden />, onSelect: redo, disabled: !canRedo },
+      ]}
       menuItems={[
         { type: "item", label: "Ekspor JSON", icon: <FileJson className="size-4" aria-hidden />, onSelect: exportFlowchartJson, disabled: empty, title: emptyHint ?? "Ekspor ke file JSON" },
         { type: "item", label: "Ekspor PNG", icon: <ImageIcon className="size-4" aria-hidden />, onSelect: () => void exportFlowchartPng(), disabled: empty, title: emptyHint ?? "Ekspor gambar PNG" },

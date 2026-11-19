@@ -172,6 +172,7 @@ export function FlowchartCanvas() {
         snapToGrid
         snapGrid={[10, 10]}
         colorMode="dark"
+        proOptions={{ hideAttribution: isMobile }}
         aria-label="Canvas flowchart"
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1.2} color="#3a352e" />

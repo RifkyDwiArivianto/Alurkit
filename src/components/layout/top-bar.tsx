@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import { ModeSwitch } from "./mode-switch";
 import { useUiStore, type SaveStatus } from "@/stores/ui-store";
 
-export function Logo() {
+export function Logo({ alwaysWordmark = false }: { alwaysWordmark?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
       <svg viewBox="0 0 32 32" className="size-7" aria-hidden>
@@ -28,7 +28,7 @@ export function Logo() {
         <path d="M9 21h6a3 3 0 0 0 3-3v-1a3 3 0 0 1 3-3h2M9 13h4" stroke="#0d0c0b" strokeWidth="2.4" strokeLinecap="round" fill="none" />
         <circle cx="23.5" cy="14" r="2.2" fill="#0d0c0b" />
       </svg>
-      <span className="hidden text-[15px] font-bold tracking-tight sm:block">FlowForge</span>
+      <span className={cn("text-[15px] font-bold tracking-tight", !alwaysWordmark && "hidden sm:block")}>FlowForge</span>
     </div>
   );
 }

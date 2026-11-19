@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 // Dijalankan hanya di proyek "mobile" (Pixel 7, 412px). Lihat playwright.config.ts.
 const shapes = (page: Page) => page.locator(".react-flow__node-shape");
-const menuTrigger = (page: Page) => page.getByRole("button", { name: "Menu file" });
+const menuTrigger = (page: Page) => page.getByRole("button", { name: "Menu", exact: true });
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -19,13 +19,17 @@ test.describe("top bar HP @mobile", () => {
     await page.getByRole("menuitemradio", { name: /^Workflow/ }).click();
     await expect(page.getByRole("button", { name: "Workflow", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Run" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Undo" })).toBeVisible(); // pil undo/redo mengambang
+    await menuTrigger(page).click();
+    await expect(page.getByRole("menuitem", { name: "Undo" })).toBeDisabled(); // Undo/Redo ada di menu ⋯
   });
 
-  test("tidak ada toggle panel dan undo/redo di top bar; Escape menutup menu", async ({ page }) => {
-    await expect(page.getByRole("button", { name: "Uji alur" })).toBeVisible();
-    await expect(page.locator("header").getByRole("button", { name: /^(Undo|Redo)$/ })).toHaveCount(0);
+  test("top bar: logo, mode, dan menu saja; Uji alur dan Undo/Redo ada di menu ⋯", async ({ page }) => {
+    const header = page.locator("header");
+    await expect(header.getByText("FlowForge")).toBeVisible();
+    await expect(header.getByRole("button", { name: /^(Uji alur|Undo|Redo)$/ })).toHaveCount(0);
     await menuTrigger(page).click();
+    await expect(page.getByRole("menuitem", { name: "Uji alur" })).toBeEnabled();
+    await expect(page.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
     await expect(page.getByRole("menuitem", { name: "Ekspor PNG" })).toBeDisabled(); // canvas kosong
     await page.keyboard.press("Escape");
     await expect(page.getByRole("menu")).toBeHidden();
@@ -67,10 +71,11 @@ test.describe("palet dan inspector HP @mobile", () => {
     await inspector.getByLabel("Teks").fill("Verifikasi data");
     await expect(shapes(page).first()).toContainText("Verifikasi data");
 
-    // menutup sheet membatalkan pilihan; kontrol mengambang kembali dan Undo membatalkan penambahan
+    // menutup sheet membatalkan pilihan; Undo dari menu ⋯ membatalkan penambahan
     await page.keyboard.press("Escape");
     await expect(inspector).toBeHidden();
-    await page.getByRole("button", { name: "Undo" }).click();
+    await menuTrigger(page).click();
+    await page.getByRole("menuitem", { name: "Undo" }).click();
     await expect(shapes(page)).toHaveCount(0);
   });
 
@@ -99,7 +104,8 @@ test.describe("panel bawah HP @mobile", () => {
   test("Uji alur: tinggi S/M/L, maksimum sekitar 40% layar", async ({ page }) => {
     await menuTrigger(page).click();
     await page.getByRole("menuitem", { name: "Muat contoh" }).click();
-    await page.getByRole("button", { name: "Uji alur" }).first().click();
+    await menuTrigger(page).click();
+    await page.getByRole("menuitem", { name: "Uji alur" }).click();
 
     const panel = page.getByRole("region", { name: "Uji alur" });
     await expect(panel).toBeVisible();

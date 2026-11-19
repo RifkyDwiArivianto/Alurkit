@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, FilePlus, Play, Sparkles, Square } from "lucide-react";
+import { Download, FilePlus, Play, Redo2, Sparkles, Square, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useExecutionStore } from "@/features/workflow/execution-store";
 import { exportWorkflow, importWorkflowFile } from "@/features/workflow/file-io";
@@ -15,6 +15,10 @@ export function WorkflowMobileTopBar() {
   const name = useWorkflowStore((s) => s.name);
   const setName = useWorkflowStore((s) => s.setName);
   const nodeCount = useWorkflowStore((s) => s.nodes.length);
+  const undo = useWorkflowStore((s) => s.undo);
+  const redo = useWorkflowStore((s) => s.redo);
+  const canUndo = useWorkflowStore((s) => s.past.length > 0);
+  const canRedo = useWorkflowStore((s) => s.future.length > 0);
   const runStatus = useExecutionStore((s) => s.status);
   const run = useExecutionStore((s) => s.run);
   const cancel = useExecutionStore((s) => s.cancel);
@@ -49,6 +53,10 @@ export function WorkflowMobileTopBar() {
           </span>
         </>
       }
+      menuLead={[
+        { type: "item", label: "Undo", icon: <Undo2 className="size-4" aria-hidden />, onSelect: undo, disabled: !canUndo },
+        { type: "item", label: "Redo", icon: <Redo2 className="size-4" aria-hidden />, onSelect: redo, disabled: !canRedo },
+      ]}
       menuItems={[
         {
           type: "item",

@@ -97,6 +97,7 @@ export function WorkflowCanvas() {
         snapToGrid
         snapGrid={[16, 16]}
         colorMode="dark"
+        proOptions={{ hideAttribution: isMobile }}
         aria-label="Canvas workflow"
       >
         <Background variant={BackgroundVariant.Dots} gap={24} size={1.4} color="#3a352e" />

@@ -38,7 +38,7 @@ export function ModeDropdown() {
         <ChevronDown className={cn("size-4 text-ink-400 transition-transform", open && "rotate-180")} aria-hidden />
       </button>
 
-      <MenuPopover open={open} onClose={() => setOpen(false)} triggerRef={triggerRef} label="Mode editor" align="left" className="w-64">
+      <MenuPopover open={open} onClose={() => setOpen(false)} triggerRef={triggerRef} label="Mode editor" align="right" className="w-64">
         {MODES.map(({ id, label, hint, icon: Icon }) => (
           <MenuItem
             key={id}
