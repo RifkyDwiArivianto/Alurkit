@@ -24,7 +24,6 @@ export function WorkflowMobileTopBar() {
   const cancel = useExecutionStore((s) => s.cancel);
   const running = runStatus === "running";
   const saveStatus = useUiStore((s) => s.saveStatus);
-  const savedAt = useUiStore((s) => s.savedAt);
 
   return (
     <MobileTopBar
@@ -32,7 +31,6 @@ export function WorkflowMobileTopBar() {
       onTitleChange={setName}
       titleLabel="Nama workflow"
       saveStatus={saveStatus}
-      savedAt={savedAt}
       importLabel="Import JSON"
       importDisabled={running}
       importInputLabel="Pilih file workflow JSON"
@@ -40,12 +38,12 @@ export function WorkflowMobileTopBar() {
       primary={
         <>
           {running ? (
-            <Button variant="danger" className="h-11 px-3.5" onClick={cancel} aria-label="Stop" title="Hentikan eksekusi">
-              <Square className="size-4" aria-hidden /> Stop
+            <Button variant="danger" className="relative h-9 px-3 text-[13px] before:absolute before:-inset-1 before:content-['']" onClick={cancel} aria-label="Stop" title="Hentikan eksekusi">
+              <Square className="size-3.5" aria-hidden /> Stop
             </Button>
           ) : (
-            <Button variant="primary" className="h-11 px-3.5" onClick={() => void run()} aria-label="Run" title="Jalankan workflow">
-              <Play className="size-4" aria-hidden /> Run
+            <Button variant="primary" className="relative h-9 px-3 text-[13px] before:absolute before:-inset-1 before:content-['']" onClick={() => void run()} aria-label="Run" title="Jalankan workflow">
+              <Play className="size-3.5" aria-hidden /> Run
             </Button>
           )}
           <span className="sr-only" role="status" aria-live="polite">

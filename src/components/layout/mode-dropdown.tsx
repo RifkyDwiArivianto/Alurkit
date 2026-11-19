@@ -29,13 +29,14 @@ export function ModeDropdown() {
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "inline-flex h-11 items-center gap-2 rounded-lg border border-ink-600 bg-ink-850 pr-2.5 pl-3 text-sm font-medium text-ink-100 transition-colors hover:bg-ink-800",
-          open && "border-ink-500 bg-ink-800",
+          // 36px terlihat, area sentuh 44px lewat pseudo-elemen
+          "relative inline-flex h-9 items-center gap-1.5 rounded-lg border border-ink-700 pr-2 pl-2.5 text-[13px] font-medium text-ink-200 transition-colors before:absolute before:-inset-1 before:content-[''] hover:bg-ink-800",
+          open && "border-ink-600 bg-ink-800",
         )}
       >
-        <CurrentIcon className="size-4 text-ember-400" aria-hidden />
+        <CurrentIcon className="size-3.5 text-ember-400" aria-hidden />
         {current.label}
-        <ChevronDown className={cn("size-4 text-ink-400 transition-transform", open && "rotate-180")} aria-hidden />
+        <ChevronDown className={cn("size-3.5 text-ink-400 transition-transform", open && "rotate-180")} aria-hidden />
       </button>
 
       <MenuPopover open={open} onClose={() => setOpen(false)} triggerRef={triggerRef} label="Mode editor" align="right" className="w-64">

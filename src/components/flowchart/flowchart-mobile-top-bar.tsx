@@ -14,7 +14,6 @@ export function FlowchartMobileTopBar() {
   const setTitle = useFlowchartStore((s) => s.setTitle);
   const empty = useFlowchartStore((s) => s.nodes.length === 0 && s.lanes.length === 0);
   const status = useUiStore((s) => s.chartSaveStatus);
-  const savedAt = useUiStore((s) => s.chartSavedAt);
   const testOpen = useTestStore((s) => s.open);
   const toggleTest = useTestStore((s) => s.togglePanel);
   const undo = useFlowchartStore((s) => s.undo);
@@ -35,7 +34,6 @@ export function FlowchartMobileTopBar() {
       onTitleChange={setTitle}
       titleLabel="Judul flowchart"
       saveStatus={status}
-      savedAt={savedAt}
       importLabel="Import JSON"
       importInputLabel="Pilih file flowchart JSON"
       onImportFile={(file) => void importFlowchartFile(file)}

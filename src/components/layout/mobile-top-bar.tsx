@@ -6,7 +6,7 @@ import { MenuItem, MenuPopover, MenuSeparator } from "@/components/ui/menu-popov
 import { cn } from "@/lib/utils";
 import type { SaveStatus } from "@/stores/ui-store";
 import { ModeDropdown } from "./mode-dropdown";
-import { Logo, SAVE_DOT, saveLabel } from "./top-bar";
+import { Logo } from "./top-bar";
 
 export type MobileMenuEntry =
   | { type: "item"; label: string; icon: ReactNode; onSelect: () => void; disabled?: boolean; title?: string }
@@ -17,8 +17,8 @@ interface MobileTopBarProps {
   onTitleChange: (value: string) => void;
   /** aria-label kolom judul; sama dengan versi desktop ("Nama workflow" / "Judul flowchart"). */
   titleLabel: string;
+  /** Status simpan otomatis. Hanya "error" yang ditampilkan di HP; status normal sengaja disembunyikan. */
   saveStatus: SaveStatus;
-  savedAt: number | null;
   /** Aksi utama opsional di kanan baris pertama (Workflow: Run/Stop). Flowchart tidak punya; aksinya ada di menu ⋯. */
   primary?: ReactNode;
   /** Item menu ⋯ sebelum "Import JSON" (mis. Uji alur, Undo, Redo); diikuti pemisah. */
@@ -41,7 +41,6 @@ export function MobileTopBar({
   onTitleChange,
   titleLabel,
   saveStatus,
-  savedAt,
   primary,
   menuLead = [],
   menuItems,
@@ -62,7 +61,7 @@ export function MobileTopBar({
 
   return (
     <header className="relative z-40 shrink-0 border-b border-ink-700 bg-ink-900">
-      <div className="flex h-12 items-center gap-2 px-2">
+      <div className="flex h-12 items-center gap-1.5 px-3">
         <Logo alwaysWordmark={!primary} />
         <div className="min-w-0 flex-1" />
         {primary}
@@ -90,11 +89,12 @@ export function MobileTopBar({
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
             className={cn(
-              "inline-flex size-11 items-center justify-center rounded-lg border border-ink-600 bg-ink-850 text-ink-200 transition-colors hover:bg-ink-800",
-              menuOpen && "border-ink-500 bg-ink-800 text-ember-400",
+              // 36px terlihat, area sentuh 44px lewat pseudo-elemen
+              "relative inline-flex size-9 items-center justify-center rounded-lg text-ink-300 transition-colors before:absolute before:-inset-1 before:content-[''] hover:bg-ink-800 hover:text-ink-100",
+              menuOpen && "bg-ink-800 text-ember-400",
             )}
           >
-            <Ellipsis className="size-5" aria-hidden />
+            <Ellipsis className="size-[18px]" aria-hidden />
           </button>
           <MenuPopover open={menuOpen} onClose={() => setMenuOpen(false)} triggerRef={menuTrigger} label="Menu" align="right" dim>
             {menuLead.length > 0 && (
@@ -116,10 +116,12 @@ export function MobileTopBar({
 
       <div className="flex h-7 items-center justify-between gap-3 border-t border-ink-700/60 px-3">
         <TitleField value={title} onChange={onTitleChange} label={titleLabel} />
-        <span className="flex shrink-0 items-center gap-1.5 text-[11px] text-ink-400" title="Disimpan otomatis di penyimpanan lokal browser ini">
-          <span className={cn("size-1.5 rounded-full", SAVE_DOT[saveStatus])} aria-hidden />
-          {saveLabel(saveStatus, savedAt)}
-        </span>
+        {saveStatus === "error" && (
+          <span role="alert" className="flex shrink-0 items-center gap-1.5 text-[11px] text-rose-300">
+            <span className="size-1.5 rounded-full bg-rose-400" aria-hidden />
+            Gagal menyimpan
+          </span>
+        )}
       </div>
     </header>
   );
