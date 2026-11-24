@@ -49,7 +49,7 @@ const fileSchema = z.object({
 });
 
 export type SerializedWorkflow = {
-  app: "flowforge";
+  app: "alurkit";
   version: typeof WORKFLOW_FILE_VERSION;
 } & z.infer<typeof fileSchema>;
 
@@ -67,7 +67,7 @@ const round = (n: number) => Math.round(n * 10) / 10;
 /** Hanya data yang bermakna — status UI (seleksi, ukuran terukur, gaya edge) tidak ikut. */
 export function serializeWorkflow(w: WorkflowLike): SerializedWorkflow {
   return {
-    app: "flowforge",
+    app: "alurkit",
     version: WORKFLOW_FILE_VERSION,
     name: w.name,
     nodes: w.nodes.map((n) => ({
@@ -106,11 +106,13 @@ export function parseWorkflowJson(text: string): ParseResult {
   } catch {
     return { ok: false, error: "File bukan JSON yang valid." };
   }
-  if (raw !== null && typeof raw === "object" && (raw as { app?: unknown }).app === "flowforge-flowchart") {
+  const app = raw !== null && typeof raw === "object" ? (raw as { app?: unknown }).app : undefined;
+  if (app === "alurkit-flowchart" || app === "flowforge-flowchart") {
     return { ok: false, error: "Ini file Flowchart. Pindah ke mode Flowchart untuk mengimpornya." };
   }
-  if (raw === null || typeof raw !== "object" || (raw as { app?: unknown }).app !== "flowforge") {
-    return { ok: false, error: "Ini bukan file workflow FlowForge." };
+  // "flowforge" = penanda file ekspor lama (sebelum ganti nama), masih diterima.
+  if (app !== "alurkit" && app !== "flowforge") {
+    return { ok: false, error: "Ini bukan file workflow Alurkit." };
   }
   const version = (raw as { version?: unknown }).version;
   if (version !== WORKFLOW_FILE_VERSION) {

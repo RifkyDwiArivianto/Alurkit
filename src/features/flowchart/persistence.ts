@@ -1,7 +1,9 @@
 import { parseFlowchartJson } from "./serialize";
 import type { FlowchartDoc } from "./types";
 
-export const FLOWCHART_STORAGE_KEY = "flowforge:flowchart:v1";
+export const FLOWCHART_STORAGE_KEY = "alurkit:flowchart:v1";
+/** Key lama (sebelum ganti nama): hanya dibaca bila key baru kosong, agar diagram tersimpan tidak hilang. */
+export const LEGACY_FLOWCHART_STORAGE_KEY = "flowforge:flowchart:v1";
 
 export type LoadOutcome =
   | { status: "empty" }
@@ -20,7 +22,7 @@ function safeStorage(): Storage | undefined {
 export function loadFlowchart(storage: Storage | undefined = safeStorage()): LoadOutcome {
   if (!storage) return { status: "unavailable" };
   try {
-    const raw = storage.getItem(FLOWCHART_STORAGE_KEY);
+    const raw = storage.getItem(FLOWCHART_STORAGE_KEY) ?? storage.getItem(LEGACY_FLOWCHART_STORAGE_KEY);
     if (raw === null) return { status: "empty" };
     const parsed = parseFlowchartJson(raw);
     if (parsed.ok) return { status: "ok", doc: parsed.doc };

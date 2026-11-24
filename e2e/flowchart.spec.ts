@@ -77,7 +77,7 @@ test("import file Workflow di mode Flowchart ditolak dengan petunjuk", async ({ 
   await page.getByLabel("Pilih file flowchart JSON").setInputFiles({
     name: "workflow.json",
     mimeType: "application/json",
-    buffer: Buffer.from(JSON.stringify({ app: "flowforge", version: 1 })),
+    buffer: Buffer.from(JSON.stringify({ app: "alurkit", version: 1 })),
   });
   await expect(page.getByRole("alert")).toContainText("mode Workflow");
 });

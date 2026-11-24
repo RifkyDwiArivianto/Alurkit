@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loadFromStorage, saveToStorage, STORAGE_KEY } from "./persistence";
+import { LEGACY_STORAGE_KEY, loadFromStorage, saveToStorage, STORAGE_KEY } from "./persistence";
 import { stringifyWorkflow } from "./serialize";
 import { makeEdge, makeNode } from "./test-helpers";
 
@@ -31,6 +31,16 @@ describe("persistence", () => {
     const out = loadFromStorage(storage);
     expect(out.status).toBe("ok");
     if (out.status === "ok") expect(out.workflow.nodes).toHaveLength(2);
+  });
+
+  it("data di key lama (flowforge:…) tetap dimuat, simpan berikutnya ke key baru", () => {
+    const { storage, data } = fakeStorage();
+    const text = stringifyWorkflow({ name: "Lama", nodes: [makeNode("start", "s")], edges: [] });
+    storage.setItem(LEGACY_STORAGE_KEY, text);
+    const out = loadFromStorage(storage);
+    expect(out.status).toBe("ok");
+    saveToStorage(text, storage);
+    expect(data.has(STORAGE_KEY)).toBe(true);
   });
 
   it("data rusak → corrupt dan dicadangkan", () => {

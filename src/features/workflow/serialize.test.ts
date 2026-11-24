@@ -31,6 +31,14 @@ describe("serialisasi", () => {
     expect(r.workflow.edges[1]?.label).toBe("Ya");
   });
 
+  it("file ekspor lama (app: flowforge) tetap bisa diimpor", () => {
+    expect(parseWorkflowJson(withFile((f) => (f.app = "flowforge"))).ok).toBe(true);
+  });
+
+  it("file baru memakai penanda app: alurkit", () => {
+    expect(serializeWorkflow(sample()).app).toBe("alurkit");
+  });
+
   it("tidak menyertakan status UI seperti seleksi", () => {
     const w = sample();
     w.nodes[0]!.selected = true;
@@ -45,7 +53,7 @@ describe("penolakan file tidak valid", () => {
     if (!r.ok) expect(r.error).toContain(part);
   };
 
-  it("bukan JSON / bukan FlowForge / versi salah", () => {
+  it("bukan JSON / bukan Alurkit / versi salah", () => {
     fail("{", "bukan JSON");
     fail("[]", "bukan file workflow");
     fail(withFile((f) => (f.app = "lain")), "bukan file workflow");

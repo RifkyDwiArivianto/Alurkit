@@ -3,8 +3,8 @@ import { useCallback, useRef } from "react";
 import { useWorkflowStore } from "./store";
 import type { NodeKind } from "./types";
 
-export const CANVAS_ID = "flowforge-canvas";
-export const DRAG_MIME = "application/x-flowforge-node";
+export const CANVAS_ID = "alurkit-canvas";
+export const DRAG_MIME = "application/x-alurkit-node";
 const NODE_W = 208;
 const NODE_H = 72;
 

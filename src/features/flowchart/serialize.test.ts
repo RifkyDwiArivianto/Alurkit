@@ -34,10 +34,19 @@ describe("round-trip", () => {
   });
 });
 
+describe("kompatibilitas file lama", () => {
+  it("file flowchart lama (app: flowforge-flowchart) tetap bisa diimpor", () => {
+    expect(parseFlowchartJson(mutate((f) => (f.app = "flowforge-flowchart"))).ok).toBe(true);
+  });
+  it("file Workflow lama (app: flowforge) tetap ditolak dengan petunjuk mode", () => {
+    fail(JSON.stringify({ app: "flowforge", version: 1 }), "file Workflow");
+  });
+});
+
 describe("penolakan", () => {
   it("bukan JSON, file Workflow, app lain, versi salah", () => {
     fail("{", "bukan JSON");
-    fail(JSON.stringify({ app: "flowforge", version: 1 }), "file Workflow");
+    fail(JSON.stringify({ app: "alurkit", version: 1 }), "file Workflow");
     fail(JSON.stringify({ app: "lain" }), "bukan file flowchart");
     fail(mutate((f) => (f.version = 7)), "tidak didukung");
   });

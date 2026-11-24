@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   ...(isPages && {
     output: "export",
     images: { unoptimized: true },
-    basePath: "/Flowforge",
+    basePath: "/Alurkit",
   }),
 };
 

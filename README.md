@@ -1,4 +1,4 @@
-# FlowForge
+# Alurkit
 
 Visual workflow builder: Next.js (App Router) · TypeScript · Tailwind v4 · @xyflow/react · Zustand · Zod · Motion.
 
@@ -33,7 +33,7 @@ npx playwright install chromium && npm run e2e   # tes end-to-end (proyek deskto
 
 ## Mode Flowchart
 
-Toggle **Workflow | Flowchart** di top bar. Flowchart adalah dokumen terpisah (disimpan di `flowforge:flowchart:v1`) untuk menggambar sistem berjalan atau usulan; tidak dieksekusi.
+Toggle **Workflow | Flowchart** di top bar. Flowchart adalah dokumen terpisah (disimpan di `alurkit:flowchart:v1`) untuk menggambar sistem berjalan atau usulan; tidak dieksekusi.
 
 - Simbol standar: Mulai/Selesai, Proses, Keputusan, Input/Output, Dokumen, Basis data, Sub-proses, Konektor, Catatan. Teks, warna, dan ukuran bisa diubah; garis bisa diberi label, bentuk, dan putus-putus.
 - Swimlane: jalur per peran/departemen. Tinggi lane dan urutannya bisa diubah, simbol di dalamnya ikut bergeser. Lane hanya bisa dihapus jika kosong.
@@ -44,7 +44,7 @@ Toggle **Workflow | Flowchart** di top bar. Flowchart adalah dokumen terpisah (d
 
 Di bawah `lg` aplikasi memakai tata letak HP; tampilan desktop (≥1024px) tidak berubah. Pemilihannya lewat `useIsMobile()` (`src/lib/use-is-mobile.ts`, media query `(max-width: 1023px)`), jadi hanya satu versi yang dirender pada satu waktu.
 
-- **Top bar dua baris** (`mobile-top-bar.tsx`): baris 1 berisi logo FlowForge di kiri, lalu dropdown mode berlabel (`Flowchart ▾` / `Workflow ▾`) dan menu ⋯ di kanan. Di Workflow, **Run** (berubah jadi **Stop** saat berjalan) tetap tampil di sebelah dropdown mode karena itu aksi utamanya. Baris 2 berisi judul dengan ikon pensil (ketuk untuk mengganti nama). Status "Tersimpan" disembunyikan di HP; hanya "Gagal menyimpan" yang muncul bila penyimpanan gagal. Tombol mode, ⋯, dan Run berukuran 36px dengan area sentuh 44px.
+- **Top bar dua baris** (`mobile-top-bar.tsx`): baris 1 berisi logo Alurkit di kiri, lalu dropdown mode berlabel (`Flowchart ▾` / `Workflow ▾`) dan menu ⋯ di kanan. Di Workflow, **Run** (berubah jadi **Stop** saat berjalan) tetap tampil di sebelah dropdown mode karena itu aksi utamanya. Baris 2 berisi judul dengan ikon pensil (ketuk untuk mengganti nama). Status "Tersimpan" disembunyikan di HP; hanya "Gagal menyimpan" yang muncul bila penyimpanan gagal. Tombol mode, ⋯, dan Run berukuran 36px dengan area sentuh 44px.
 - **Menu ⋯**: Uji alur (Flowchart), Undo, Redo, Import JSON, Ekspor JSON/PNG/PDF (Flowchart), Muat contoh, Diagram baru / Workflow baru. Memakai fungsi yang sama dengan desktop (`load-sample.ts`, `new-workflow.ts`, `file-io.ts`), jadi aturannya sama: ekspor nonaktif bila kosong, import dan "baru" ditolak saat workflow berjalan.
 - **Kontrol mengambang** (`mobile-canvas-controls.tsx`): tumpukan zoom (tombol 40px) di kiri bawah, FAB **+** (48px) di kanan bawah. Teks atribusi React Flow disembunyikan di HP (`proOptions.hideAttribution`). Disembunyikan saat ada sheet atau panel bawah terbuka.
 - **`BottomSheet`** (`components/ui/bottom-sheet.tsx`): handle bar yang bisa ditarik, animasi Motion (mengikuti `prefers-reduced-motion` lewat `MotionConfig`), `env(safe-area-inset-bottom)`, tinggi dalam `dvh`, Escape menutup. Tinggi sheet dilaporkan ke `ui-store.bottomInset`.

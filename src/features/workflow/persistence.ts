@@ -1,6 +1,8 @@
 import { parseWorkflowJson, type LoadedWorkflow } from "./serialize";
 
-export const STORAGE_KEY = "flowforge:workflow:v1";
+export const STORAGE_KEY = "alurkit:workflow:v1";
+/** Key lama (sebelum ganti nama): hanya dibaca bila key baru kosong, agar workflow tersimpan tidak hilang. */
+export const LEGACY_STORAGE_KEY = "flowforge:workflow:v1";
 
 export type LoadOutcome =
   | { status: "empty" }
@@ -19,7 +21,7 @@ function safeStorage(): Storage | undefined {
 export function loadFromStorage(storage: Storage | undefined = safeStorage()): LoadOutcome {
   if (!storage) return { status: "unavailable" };
   try {
-    const raw = storage.getItem(STORAGE_KEY);
+    const raw = storage.getItem(STORAGE_KEY) ?? storage.getItem(LEGACY_STORAGE_KEY);
     if (raw === null) return { status: "empty" };
     const parsed = parseWorkflowJson(raw);
     if (parsed.ok) return { status: "ok", workflow: parsed.workflow };

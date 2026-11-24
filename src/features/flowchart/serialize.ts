@@ -14,7 +14,10 @@ import {
   type FlowchartDoc,
 } from "./types";
 
-export const FLOWCHART_APP = "flowforge-flowchart";
+export const FLOWCHART_APP = "alurkit-flowchart";
+/** Penanda app pada file ekspor lama (sebelum ganti nama) — masih diterima saat impor. */
+const LEGACY_FLOWCHART_APP = "flowforge-flowchart";
+const WORKFLOW_APPS: unknown[] = ["alurkit", "flowforge"];
 export const FLOWCHART_FILE_VERSION = 1;
 export const MAX_FILE_BYTES = 1_000_000;
 
@@ -115,8 +118,8 @@ export function parseFlowchartJson(text: string): ParseResult {
     return { ok: false, error: "File bukan JSON yang valid." };
   }
   const app = raw !== null && typeof raw === "object" ? (raw as { app?: unknown }).app : undefined;
-  if (app === "flowforge") return { ok: false, error: "Ini file Workflow. Pindah ke mode Workflow untuk mengimpornya." };
-  if (app !== FLOWCHART_APP) return { ok: false, error: "Ini bukan file flowchart FlowForge." };
+  if (WORKFLOW_APPS.includes(app)) return { ok: false, error: "Ini file Workflow. Pindah ke mode Workflow untuk mengimpornya." };
+  if (app !== FLOWCHART_APP && app !== LEGACY_FLOWCHART_APP) return { ok: false, error: "Ini bukan file flowchart Alurkit." };
   const version = (raw as { version?: unknown }).version;
   if (version !== FLOWCHART_FILE_VERSION) {
     return { ok: false, error: `Versi file (${String(version)}) tidak didukung. Versi yang didukung: ${FLOWCHART_FILE_VERSION}.` };

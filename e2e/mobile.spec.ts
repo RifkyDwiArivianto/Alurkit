@@ -25,7 +25,7 @@ test.describe("top bar HP @mobile", () => {
 
   test("top bar: logo, mode, dan menu saja; Uji alur dan Undo/Redo ada di menu ⋯", async ({ page }) => {
     const header = page.locator("header");
-    await expect(header.getByText("FlowForge")).toBeVisible();
+    await expect(header.getByText("Alurkit")).toBeVisible();
     await expect(header.getByRole("button", { name: /^(Uji alur|Undo|Redo)$/ })).toHaveCount(0);
     await menuTrigger(page).click();
     await expect(page.getByRole("menuitem", { name: "Uji alur" })).toBeEnabled();

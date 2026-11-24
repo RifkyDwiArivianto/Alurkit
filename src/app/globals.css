@@ -39,7 +39,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Penyesuaian tema React Flow agar menyatu dengan palet FlowForge */
+/* Penyesuaian tema React Flow agar menyatu dengan palet Alurkit */
 .react-flow {
   --xy-background-color: var(--color-ink-950);
   --xy-edge-stroke: var(--color-ink-400);

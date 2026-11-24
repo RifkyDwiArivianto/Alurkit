@@ -4,8 +4,8 @@ import { FLOW_KIND_DEFS } from "./defs";
 import { useFlowchartStore } from "./store";
 import type { FlowKind } from "./types";
 
-export const CHART_CANVAS_ID = "flowforge-chart-canvas";
-export const SHAPE_DRAG_MIME = "application/x-flowforge-shape";
+export const CHART_CANVAS_ID = "alurkit-chart-canvas";
+export const SHAPE_DRAG_MIME = "application/x-alurkit-shape";
 
 /** Menempatkan simbol baru di tengah area canvas yang terlihat (berundak agar tidak menumpuk). */
 export function usePlaceShape() {
